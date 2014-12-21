@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Simple collision detection</title>
+    </head>
+    <body>
+        <canvas id="canvas" width="1024" height="768" />
+        <script src="BoundingBox.js"></script>
+        <script src="SparseGrid.js"></script>
+        <script src="Actor.js"></script>
+        <script src="Game.js"></script>
+        <script>
+            (function() {
+                var keys = {left: false, right: false, up: false};
+                function onKey(pressed, event) {
+                    if(event.keyCode == 37) keys.left = pressed;
+                    else if(event.keyCode == 39) keys.right = pressed;
+                    else if(event.keyCode == 38) { 
+                        if(pressed && !keys.up) player.velocityY = -300; 
+                        keys.up = pressed;
+                    }
+                    else return;
+                    event.preventDefault();
+                }
+                document.onkeydown = onKey.bind(null, true);
+                document.onkeyup = onKey.bind(null, false);
+                
+                var randomActors = [];
+                for(var i = 0; i < 10000; i++) {
+                    var x = Math.random() * 10000;
+                    var y = Math.random() * 10000;
+                    var w = Math.random() * 200 + 10;
+                    var h = Math.random() * 15 + 5;
+                    if(Math.random() < 0.5) {
+                        var t = w;
+                        w = h;
+                        h = t;
+                    }
+                    randomActors.push(new Actor(new BoundingBox(x, y, w, h), 0, 0));
+                }
+                
+                var canvasElement = document.getElementById('canvas');
+                var context = canvasElement.getContext('2d');
+                var player = new Actor(new BoundingBox(120, 100, 20, 30), 0, 0);
+                var actors = randomActors.concat([
+                    player,
+                    /*new Actor(new BoundingBox(100, 200, 50, 10), 0, 0),
+                    new Actor(new BoundingBox(180, 240, 20, 10), 0, 0),
+                    new Actor(new BoundingBox(300, 280, 20, 20), 0, 0),
+                    new Actor(new BoundingBox(200, 300, 300, 10), 0, 0),
+                    new Actor(new BoundingBox(410, 300, 100, 10), 0, 0),
+                    new Actor(new BoundingBox(465, 245, 10, 100), 0, 0)*/
+                ]);
+                var game = new Game(actors);
+                game.loop(context, function(game, deltaTime) {
+                    if(keys.left) player.velocityX = -200;
+                    else if(keys.right) player.velocityX = 200;
+                    else player.velocityX = 0;
+                    player.velocityY += 800 * deltaTime;
+                });
+            })();
+        </script>
+    </body>
+</html>
