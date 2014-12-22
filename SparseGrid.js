@@ -51,9 +51,9 @@ SparseGrid.prototype.find = function(boundingBox, getUniqueId) {
 
 SparseGrid.prototype.eachCell = function(boundingBox, callback) {
     var minX = Math.floor((boundingBox.x - boundingBox.halfWidth) / this.columnWidth);
-    var maxX = Math.ceil((boundingBox.x + boundingBox.halfWidth) / this.columnWidth);
+    var maxX = Math.floor((boundingBox.x + boundingBox.halfWidth) / this.columnWidth);
     var minY = Math.floor((boundingBox.y - boundingBox.halfHeight) / this.rowHeight);
-    var maxY = Math.ceil((boundingBox.y + boundingBox.halfHeight) / this.rowHeight);
+    var maxY = Math.floor((boundingBox.y + boundingBox.halfHeight) / this.rowHeight);
     for(var x = minX; x <= maxX; x++) {
         for(var y = minY; y <= maxY; y++) {
             var key = x + ',' + y;

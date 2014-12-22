@@ -57,6 +57,12 @@
                     else if(keys.right) player.velocityX = 200;
                     else player.velocityX = 0;
                     player.velocityY += 800 * deltaTime;
+                    
+                    for(var i = 0; i < 1000; i++) {
+                        var actor = randomActors[i];
+                        if(actor.boundingBox.y < 2000) actor.velocityY += 800 * deltaTime;
+                        else actor.velocityY = Math.min(0, actor.velocityY);
+                    }
                 });
             })();
         </script>

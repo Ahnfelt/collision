@@ -27,7 +27,7 @@ Actor.prototype.move = function(grid, deltaTime) {
     if(this.velocityX !== 0 || this.velocityY !== 0) {
         var deltaX = this.velocityX * deltaTime;
         var deltaY = this.velocityY * deltaTime;
-        grid.remove(this.boundingBox, this);
+        var moved = false;
         while(deltaX !== 0 || deltaY !== 0) {
             var stepX = deltaX;
             var stepY = deltaY;
@@ -39,17 +39,30 @@ Actor.prototype.move = function(grid, deltaTime) {
             }
             var box = this.boundingBox.extendedBy(stepX, stepY);
             var actors = grid.find(box, Actor.getUniqueId);
-            this.moveX(actors, stepX);
-            this.moveY(actors, stepY);
+            
+            var newX = this.moveX(actors, stepX);
+            if(newX !== this.boundingBox.x) {
+                if(!moved) grid.remove(this.boundingBox, this);
+                this.boundingBox.x = newX;
+                moved = true;
+            }
+            
+            var newY = this.moveY(actors, stepY);
+            if(newY !== this.boundingBox.y) {
+                if(!moved) grid.remove(this.boundingBox, this);
+                this.boundingBox.y = newY;
+                moved = true;
+            }
+            
             deltaX -= stepX;
             deltaY -= stepY;
         }
-        grid.insert(this.boundingBox, this);
+        if(moved) grid.insert(this.boundingBox, this);
     }
 }
 
 Actor.prototype.moveX = function(actors, delta) {
-    if(delta == 0) return;
+    if(delta == 0) return this.boundingBox.x;
     var box = this.boundingBox.extendedBy(delta, 0);
     var half = this.boundingBox.halfWidth;
     var result = this.boundingBox.x + delta;
@@ -65,11 +78,11 @@ Actor.prototype.moveX = function(actors, delta) {
             this.velocityX = 0;
         }
     }
-    this.boundingBox.x = result;
+    return result;
 }
 
 Actor.prototype.moveY = function(actors, delta) {
-    if(delta == 0) return;
+    if(delta == 0) return this.boundingBox.y;
     var box = this.boundingBox.extendedBy(0, delta);
     var half = this.boundingBox.halfHeight;
     var result = this.boundingBox.y + delta;
@@ -85,7 +98,7 @@ Actor.prototype.moveY = function(actors, delta) {
             this.velocityY = 0;
         }
     }
-    this.boundingBox.y = result;
+    return result;
 }
 
 Actor.prototype.resolution = 10;
