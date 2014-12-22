@@ -13,4 +13,6 @@ A very simple implementation of 2d collision detection &amp; movement implemente
 
 Since the movement is done one axis at a time, high velocities will give strange results, where diagonal movement will appear to "leap through" corners. To avoid this, we do the following: If the velocity is above the threshold, the movement (all of the steps above) is subdivided into N steps, each with a velocity below the threshold (10 px in the demo).
 
-Controls: Arrow keys. You can jump mid-air, which is necessary to navigate the randomly generated test-map.
+Objects that are non-solid are not added to the grid, so the movement of non-solid objects can be stopped by solid objects, but not the other way around.
+
+Controls: Arrow keys. Press space to spawn 100 non-solid objects. You can jump mid-air, which is necessary to navigate the randomly generated test-map.
