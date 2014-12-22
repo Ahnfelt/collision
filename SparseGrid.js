@@ -1,14 +1,14 @@
 function SparseGrid(columnWidth, rowHeight) {
     this.columnWidth = columnWidth;
     this.rowHeight = rowHeight;
-    this.grid = {};
+    this.cells = {};
 };
 
 SparseGrid.prototype.insert = function(boundingBox, value) {
     this.eachCell(boundingBox, function(old, x, y, key) {
         if(old == null) {
             old = [value];
-            this.grid[key] = old;
+            this.cells[key] = old;
         } else if(old.indexOf(value) == -1) {
             old.push(value);
         }
@@ -20,7 +20,7 @@ SparseGrid.prototype.remove = function(boundingBox, value) {
         if(old != null) {
             var i = old.indexOf(value);
             if(i != -1) {
-                if(old.length == 1) delete this.grid[key];
+                if(old.length == 1) delete this.cells[key];
                 else old.splice(i, 1);
             }
         }
@@ -57,7 +57,7 @@ SparseGrid.prototype.eachCell = function(boundingBox, callback) {
     for(var x = minX; x <= maxX; x++) {
         for(var y = minY; y <= maxY; y++) {
             var key = x + ',' + y;
-            callback(this.grid[key], x, y, key);
+            callback(this.cells[key], x, y, key);
         }
     }
 };

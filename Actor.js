@@ -1,7 +1,8 @@
-function Actor(boundingBox, velocityX, velocityY) {
+function Actor(boundingBox, velocityX, velocityY, solid) {
     this.boundingBox = boundingBox;
     this.velocityX = velocityX || 0;
     this.velocityY = velocityY || 0;
+    this.solid = !!solid;
     this.id = Actor.prototype.nextId++;
 }
 
@@ -18,7 +19,8 @@ Actor.prototype.draw = function(context) {
     var box = this.boundingBox;
     // TODO: Better culling (but the culling is very important - this function vastly dominates CPU usage without it)
     if(box.x + box.halfWidth > 0 && box.x - box.halfWidth < 1024 && box.y + box.halfHeight > 0 && box.y - box.halfHeight < 768) {
-        context.strokeStyle = '#505050';
+        if(this.solid) context.strokeStyle = '#505050';
+        else context.strokeStyle = '#a00000';
         context.strokeRect(box.x - box.halfWidth, box.y - box.halfHeight, box.halfWidth * 2, box.halfHeight * 2);
     }
 }
@@ -57,7 +59,7 @@ Actor.prototype.move = function(grid, deltaTime) {
             deltaX -= stepX;
             deltaY -= stepY;
         }
-        if(moved) grid.insert(this.boundingBox, this);
+        if(moved && this.solid) grid.insert(this.boundingBox, this);
     }
 }
 

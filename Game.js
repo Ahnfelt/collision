@@ -1,12 +1,27 @@
 function Game(actors) {
-    this.actors = actors;
+    this.actors = [];
     this.grid = new SparseGrid(200, 200);
-    for(var i = 0; i < this.actors.length; i++) {
-        var actor = this.actors[i];
-        this.grid.insert(actor.boundingBox, actor);
-    }
     this.time = Date.now();
+    if(actors != null) {
+        for(var i = 0; i < actors.length; i++) {
+            this.insert(actors[i]);
+        }
+    }
 }
+
+Game.prototype.insert = function(actor) {
+    var i = this.actors.indexOf(actor);
+    if(i === -1) {
+        this.actors.push(actor);
+        if(actor.solid) this.grid.insert(actor.boundingBox, actor);
+    }
+};
+
+Game.prototype.remove = function(actor) {
+    this.grid.remove(actor.boundingBox, actor);
+    var i = this.actors.indexOf(actor);
+    if(i !== -1) this.actors.splice(i, 1);
+};
 
 Game.prototype.tick = function() {
     var newTime = Date.now();
@@ -29,6 +44,7 @@ Game.prototype.draw = function(context) {
         var actor = this.actors[i];
         actor.draw(context);
     }
+    context.fillText("Objects: " + this.actors.length, 10, 10);
     context.restore();
 }
 
