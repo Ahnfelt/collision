@@ -33,9 +33,10 @@ Game.prototype.tick = function() {
 Game.prototype.update = function(deltaTime) {
     for(var i = 0; i < this.actors.length; i++) {
         var actor = this.actors[i];
-        actor.move(this.grid, deltaTime);
+        if(actor.move) actor.move(this.grid, deltaTime);
+        if(actor.onTick) actor.onTick(this, deltaTime);
     }
-}
+};
 
 Game.prototype.draw = function(context) {
     context.save();
@@ -46,7 +47,7 @@ Game.prototype.draw = function(context) {
     }
     context.fillText("Objects: " + this.actors.length, 10, 10);
     context.restore();
-}
+};
 
 Game.prototype.loop = function(context, callback) {
     var deltaTime = this.tick();
@@ -54,4 +55,4 @@ Game.prototype.loop = function(context, callback) {
     this.update(deltaTime);
     this.draw(context);
     requestAnimationFrame(this.loop.bind(this, context, callback));
-}
+};

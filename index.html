@@ -8,6 +8,7 @@
         <script src="BoundingBox.js"></script>
         <script src="SparseGrid.js"></script>
         <script src="Actor.js"></script>
+        <script src="Particle.js"></script>
         <script src="Game.js"></script>
         <script>
             (function() {
@@ -34,8 +35,7 @@
                     var velocity = 100 + 100 * Math.random();
                     var velocityX = Math.cos(angle) * velocity;
                     var velocityY = Math.sin(angle) * velocity - 100;
-                    var actor = new Actor(new BoundingBox(x, y, 5, 5), velocityX, velocityY, false);
-                    actor.onCollision = Actor.bounceOnCollision;
+                    var actor = new Particle(new BoundingBox(x, y, 5, 5), velocityX, velocityY);
                     game.insert(actor);
                     console.log(angle);
                 }

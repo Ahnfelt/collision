@@ -8,12 +8,12 @@ function Actor(boundingBox, velocityX, velocityY, solid) {
 
 Actor.prototype.setBoundingBox = function(boundingBox) {
     this.boundingBox = boundingBox;
-}
+};
 
 Actor.prototype.setVelocity = function(velocityX, velocityY) {
     this.velocityX = velocityX;
     this.velocityY = velocityY;
-}
+};
 
 Actor.prototype.draw = function(context) {
     var box = this.boundingBox;
@@ -23,7 +23,7 @@ Actor.prototype.draw = function(context) {
         else context.strokeStyle = '#a00000';
         context.strokeRect(box.x - box.halfWidth, box.y - box.halfHeight, box.halfWidth * 2, box.halfHeight * 2);
     }
-}
+};
 
 Actor.prototype.move = function(grid, deltaTime) {
     if(this.velocityX !== 0 || this.velocityY !== 0) {
@@ -73,7 +73,7 @@ Actor.prototype.move = function(grid, deltaTime) {
         }
         if(moved && this.solid) grid.insert(this.boundingBox, this);
     }
-}
+};
 
 Actor.prototype.moveX = function(actors, delta) {
     if(delta == 0) return this.boundingBox.x;
@@ -97,7 +97,7 @@ Actor.prototype.moveX = function(actors, delta) {
         }
     }
     return result;
-}
+};
 
 Actor.prototype.moveY = function(actors, delta) {
     if(delta == 0) return this.boundingBox.y;
@@ -121,29 +121,15 @@ Actor.prototype.moveY = function(actors, delta) {
         }
     }
     return result;
-}
+};
 
+Actor.prototype.onTick = null; // function(game, deltaTime)
 Actor.prototype.onCollision = null; // function(that, bounceVelocityX, bounceVelocityY, bounceX, bounceY)
 Actor.prototype.onCollisionBy = null; // function(that, incomingVelocityX, incomingVelocityY)
 
 Actor.prototype.resolution = 10;
 Actor.prototype.epsilon = 0.1;
 Actor.prototype.nextId = 1;
-
-Actor.bounceOnCollision = function(that, bounceVelocityX, bounceVelocityY, bounceX, bounceY) { 
-    if(that.solid) {
-        if(Math.abs(bounceVelocityX) > this.epsilon) this.velocityX = bounceVelocityX * 0.2;
-        if(Math.abs(bounceVelocityY) > this.epsilon) this.velocityY = bounceVelocityY * 0.2;
-        Actor.applyFriction.call(this, that, bounceVelocityX, bounceVelocityY, bounceX, bounceY);
-        return true;
-    }
-};
-
-Actor.applyFriction = function(that, bounceVelocityX, bounceVelocityY, bounceX, bounceY) {
-    var box = that.boundingBox;
-    if(bounceX > box.x - box.halfWidth && bounceX < box.x + box.halfWidth) this.velocityX *= 0.9;
-    if(bounceY > box.y - box.halfHeight && bounceY < box.y + box.halfHeight) this.velocityY *= 0.9;
-};
 
 Actor.collisionOrderLeft = function(a, b) {
     var x = this.boundingBox.x - this.boundingBox.halfWidth;
