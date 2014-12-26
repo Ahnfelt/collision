@@ -33,8 +33,9 @@
                     var angle = Math.random() * Math.PI * 2;
                     var velocity = 100 + 100 * Math.random();
                     var velocityX = Math.cos(angle) * velocity;
-                    var velocityY = Math.sin(angle) * velocity;
+                    var velocityY = Math.sin(angle) * velocity - 100;
                     var actor = new Actor(new BoundingBox(x, y, 5, 5), velocityX, velocityY, false);
+                    actor.onCollision = Actor.bounceOnCollision;
                     game.insert(actor);
                     console.log(angle);
                 }
@@ -66,7 +67,7 @@
                     else player.velocityX = 0;
                     for(var i = 0; i < game.actors.length; i++) {
                         var actor = game.actors[i];
-                        if(i < 2000 || !actor.solid) {
+                        if(i < 1000 || !actor.solid) {
                             if(actor.boundingBox.y < 2000) actor.velocityY += 800 * deltaTime;
                             else actor.velocityY = Math.min(0, actor.velocityY);
                         }

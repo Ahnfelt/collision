@@ -27,7 +27,7 @@ Game.prototype.tick = function() {
     var newTime = Date.now();
     var deltaTimeMs = newTime - this.time;
     this.time = newTime;
-    return deltaTimeMs / 1000;
+    return Math.min(100, deltaTimeMs) / 1000;
 };
 
 Game.prototype.update = function(deltaTime) {
