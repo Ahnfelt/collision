@@ -132,10 +132,17 @@ Actor.prototype.nextId = 1;
 
 Actor.bounceOnCollision = function(that, bounceVelocityX, bounceVelocityY, bounceX, bounceY) { 
     if(that.solid) {
-        if(Math.abs(bounceVelocityX) > this.epsilon) this.velocityX = bounceVelocityX * 0.2; else this.velocityX *= 0.9;
-        if(Math.abs(bounceVelocityY) > this.epsilon) this.velocityY = bounceVelocityY * 0.2; else this.velocityY *= 0.9;
+        if(Math.abs(bounceVelocityX) > this.epsilon) this.velocityX = bounceVelocityX * 0.2;
+        if(Math.abs(bounceVelocityY) > this.epsilon) this.velocityY = bounceVelocityY * 0.2;
+        Actor.applyFriction.call(this, that, bounceVelocityX, bounceVelocityY, bounceX, bounceY);
         return true;
     }
+};
+
+Actor.applyFriction = function(that, bounceVelocityX, bounceVelocityY, bounceX, bounceY) {
+    var box = that.boundingBox;
+    if(bounceX > box.x - box.halfWidth && bounceX < box.x + box.halfWidth) this.velocityX *= 0.9;
+    if(bounceY > box.y - box.halfHeight && bounceY < box.y + box.halfHeight) this.velocityY *= 0.9;
 };
 
 Actor.collisionOrderLeft = function(a, b) {
