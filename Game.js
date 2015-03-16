@@ -10,6 +10,7 @@ function Game(actors) {
 }
 
 Game.prototype.insert = function(actor) {
+    actor.game = this;
     var i = this.actors.indexOf(actor);
     if(i === -1) {
         this.actors.push(actor);
